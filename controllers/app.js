@@ -9,10 +9,6 @@ const cors = require("cors");
 const allowedOrigin = process.env.ORIGIN || "http://127.0.0.1:5173";
 app.use(cors({ origin: allowedOrigin, methods: "GET, POST, DELETE, PUT" }));
 
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);

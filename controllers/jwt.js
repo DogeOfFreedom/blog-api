@@ -16,14 +16,18 @@ const auth = (req, res, next) => {
 };
 
 const createToken = (req, res) => {
-  const { user } = req;
-  jwt.sign(user, process.env.JWT_SECRET_KEY, (err, token) => {
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
+  const user = req.user.toJSON();
+  jwt.sign(
+    user,
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: "3600s" },
+    (err, token) => {
+      if (err) {
+        return res.sendStatus(500);
+      }
+      return res.json({ token });
     }
-    return res.json({ token });
-  });
+  );
 };
 
 const verifyToken = (req, res, next) => {
