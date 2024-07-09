@@ -5,6 +5,7 @@
   "main": "webpack.config.js",
   "scripts": {
     "server": "nodemon ./controllers/app",
+    "debug": "nodemon --env-file=.env --inspect ./controllers/app",
     "eslint": "eslint --init"
   },
   "repository": {

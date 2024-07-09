@@ -2,7 +2,6 @@
 const mongoose = require("mongoose");
 const path = require("path");
 const express = require("express");
-const passport = require("passport");
 const app = express();
 
 // cors setup
@@ -29,15 +28,14 @@ mongoose
 // Passport setup
 require("./passport");
 
-// Session setup
-app.use(passport.session());
-
 // public directory for serving the static files.
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 
-const router = require("../routers/general");
-app.use("/api", router);
+const authentication = require("../routers/authentication");
+const api = require("../routers/api");
+app.use("/api", authentication);
+app.use("/api", api);
 
 // error handler for when all routes fail
 app.use((err, req, res, next) => {
