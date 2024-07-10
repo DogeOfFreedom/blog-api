@@ -2,13 +2,13 @@ const expressAsyncHandler = require("express-async-handler");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
-const createUser = expressAsyncHandler(async (req, res) => {
+const createUser = expressAsyncHandler(async (req, res, next) => {
   const { firstname, lastname, email, username, password, profilePictureURL } =
     req.body;
 
   bcrypt.hash(password, 10, async (err, hashedPassword) => {
     if (err) {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
 
     const newUser = {
@@ -20,7 +20,7 @@ const createUser = expressAsyncHandler(async (req, res) => {
       profilePictureURL,
     };
     await User.create(newUser);
-    res.redirect("/");
+    return next();
   });
 });
 

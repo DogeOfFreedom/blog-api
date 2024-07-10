@@ -16,18 +16,27 @@ const auth = (req, res, next) => {
 };
 
 const createToken = (req, res) => {
-  const user = req.user.toJSON();
+  const { _id } = req.user.toJSON();
   jwt.sign(
-    user,
+    { _id },
     process.env.JWT_SECRET_KEY,
     { expiresIn: "3600s" },
     (err, token) => {
       if (err) {
         return res.sendStatus(500);
       }
-      return res.json({ token });
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60,
+      });
+      return res.sendStatus(200);
     }
   );
+};
+
+const invalidateToken = (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.sendStatus(200);
 };
 
 const verifyToken = (req, res, next) => {
@@ -48,4 +57,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = { auth, createToken, verifyToken };
+module.exports = { auth, createToken, verifyToken, invalidateToken };

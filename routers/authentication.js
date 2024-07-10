@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { body } = require("express-validator");
-const { auth, createToken } = require("../controllers/jwt");
+const { auth, createToken, invalidateToken } = require("../controllers/jwt");
 const { checkForErrors } = require("../controllers/validation");
 const { createUser } = require("../controllers/user");
 
@@ -12,9 +12,7 @@ router.post(
   createToken
 );
 
-router.post("/logout", (req, res) => {
-  res.send("placeholder logout");
-});
+router.get("/logout", invalidateToken);
 
 router.post(
   "/sign-up",
@@ -63,7 +61,9 @@ router.post(
     )
     .withMessage("Profile Picture URL must be a properly formatted URL"),
   checkForErrors,
-  createUser
+  createUser,
+  auth,
+  createToken
 );
 
 module.exports = router;
