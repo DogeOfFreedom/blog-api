@@ -25,9 +25,12 @@ const createToken = (req, res) => {
       if (err) {
         return res.sendStatus(500);
       }
-      res.cookie("jwt", token, {
+      res.cookie("jwt", `Bearer ${token}`, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60,
+        sameSite: "None",
+        secure: true,
+        partitioned: true,
       });
       return res.sendStatus(200);
     }
@@ -35,12 +38,18 @@ const createToken = (req, res) => {
 };
 
 const invalidateToken = (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    maxAge: 1,
+    sameSite: "None",
+    secure: true,
+    partitioned: true,
+  });
   res.sendStatus(200);
 };
 
 const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers.authorization;
+  const bearerHeader = req.cookies.jwt;
 
   if (typeof bearerHeader !== "undefined") {
     const bearerToken = bearerHeader.split(" ")[1];
@@ -50,6 +59,7 @@ const verifyToken = (req, res, next) => {
       if (err) {
         return res.sendStatus(403);
       }
+      req.user = data;
       return next();
     });
   } else {

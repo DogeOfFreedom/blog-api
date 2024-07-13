@@ -3,8 +3,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
 const createUser = expressAsyncHandler(async (req, res, next) => {
-  const { firstname, lastname, email, username, password, profilePictureURL } =
-    req.body;
+  const { firstname, lastname, email, username, password } = req.body;
 
   bcrypt.hash(password, 10, async (err, hashedPassword) => {
     if (err) {
@@ -17,11 +16,19 @@ const createUser = expressAsyncHandler(async (req, res, next) => {
       email,
       username,
       password: hashedPassword,
-      profilePictureURL,
     };
     await User.create(newUser);
     return next();
   });
 });
 
-module.exports = { createUser };
+const uploadProfileImage = expressAsyncHandler(async (req, res) => {
+  const { imgUrl } = req.body;
+  const { _id } = req.user;
+  const user = await User.findById(_id);
+  user.profilePictureURL = imgUrl;
+  await user.save();
+  return res.sendStatus(200);
+});
+
+module.exports = { createUser, uploadProfileImage };

@@ -8,7 +8,12 @@ const generateSignature = (req, res) => {
     },
     process.env.CLOUD_API_SECRET
   );
-  return res.json({ timestamp, signature });
+  return res.json({
+    timestamp,
+    signature,
+    cloudname: process.env.CLOUD_NAME,
+    apikey: process.env.CLOUD_API_KEY,
+  });
 };
 
 module.exports = { generateSignature };

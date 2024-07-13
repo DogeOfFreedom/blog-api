@@ -30,7 +30,6 @@ const user = new mongoose.Schema({
   },
   profilePictureURL: {
     type: String,
-    required: true,
   },
   isAuthor: {
     type: Boolean,

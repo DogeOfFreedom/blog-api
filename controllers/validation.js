@@ -5,6 +5,7 @@ const checkForErrors = (req, res, next) => {
 
   if (!errorsObj.isEmpty()) {
     const firstErrorMsg = errorsObj.errors[0].msg;
+    res.status(422);
     res.json({ error: firstErrorMsg });
   }
   next();

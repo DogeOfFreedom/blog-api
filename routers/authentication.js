@@ -1,8 +1,13 @@
 const router = require("express").Router();
 const { body } = require("express-validator");
-const { auth, createToken, invalidateToken } = require("../controllers/jwt");
+const {
+  auth,
+  createToken,
+  invalidateToken,
+  verifyToken,
+} = require("../controllers/jwt");
 const { checkForErrors } = require("../controllers/validation");
-const { createUser } = require("../controllers/user");
+const { createUser, uploadProfileImage } = require("../controllers/user");
 
 router.post(
   "/login",
@@ -30,7 +35,7 @@ router.post(
     .withMessage("Last Name cannot be empty")
     .isLength({ max: 30 })
     .withMessage("Last Name cannot be longer than 20 characters"),
-  body("email"),
+  // body("email"),
   body("username")
     .trim()
     .escape()
@@ -45,25 +50,21 @@ router.post(
     .withMessage("Password cannot be empty")
     .isLength({ min: 5 })
     .withMessage("Password must be atleast 5 characters long"),
-  body("confirm_password")
+  body("confirmPassword")
     .trim()
     .escape()
     .notEmpty()
     .custom((value, { req }) => value === req.body.password)
     .withMessage("Passwords must match"),
-  body("profilePictureURL")
-    .trim()
-    .escape()
-    .notEmpty()
-    .withMessage("Profile Picture URL cannot be empty")
-    .matches(
-      /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?/
-    )
-    .withMessage("Profile Picture URL must be a properly formatted URL"),
+  body("hasProfileImg")
+    .custom((value) => value === true)
+    .withMessage("User must upload a profile picture"),
   checkForErrors,
   createUser,
   auth,
   createToken
 );
+
+router.post("/upload", verifyToken, uploadProfileImage);
 
 module.exports = router;

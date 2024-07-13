@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
 
 // cors setup
 const cors = require("cors");
@@ -36,6 +37,7 @@ require("./cloudinary");
 // public directory for serving the static files.
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
+app.use(cookieParser());
 
 const authentication = require("../routers/authentication");
 const cloud = require("../routers/cloudinary");
