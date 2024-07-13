@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "server": "nodemon ./controllers/app",
+    "server": "nodemon --env-file=.env ./controllers/app",
     "debug": "nodemon --env-file=.env --inspect ./controllers/app",
     "eslint": "eslint --init"
   },
@@ -29,6 +29,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bson": "^6.7.0",
+    "cloudinary": "^2.2.0",
     "compression": "^1.7.4",
     "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",

@@ -7,7 +7,13 @@ const app = express();
 // cors setup
 const cors = require("cors");
 const allowedOrigin = process.env.ORIGIN || "http://127.0.0.1:5173";
-app.use(cors({ origin: allowedOrigin, methods: "GET, POST, DELETE, PUT" }));
+app.use(
+  cors({
+    origin: allowedOrigin,
+    credentials: true,
+    methods: "GET, POST, DELETE, PUT",
+  })
+);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
@@ -24,13 +30,18 @@ mongoose
 // Passport setup
 require("./passport");
 
+// Cloudinary Setup
+require("./cloudinary");
+
 // public directory for serving the static files.
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 
 const authentication = require("../routers/authentication");
+const cloud = require("../routers/cloudinary");
 const api = require("../routers/api");
 app.use("/api", authentication);
+app.use("/api", cloud);
 app.use("/api", api);
 
 // error handler for when all routes fail

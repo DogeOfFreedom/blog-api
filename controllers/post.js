@@ -20,7 +20,13 @@ const getPostById = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllPosts = expressAsyncHandler(async (req, res) => {
-  const posts = await Post.find();
+  const { isPublished } = req.query;
+  let posts;
+  if (isPublished === "true") {
+    posts = await Post.find({ isPublished: true });
+  } else {
+    posts = await Post.find({});
+  }
   res.json(posts);
 });
 
