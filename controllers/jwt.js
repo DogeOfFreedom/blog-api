@@ -8,7 +8,8 @@ const auth = (req, res, next) => {
       return res.sendStatus(500);
     }
     if (!user) {
-      return res.sendStatus(401);
+      res.status(401);
+      return res.json({ error: "Incorrect Username or Password" });
     }
     req.user = user;
     next();

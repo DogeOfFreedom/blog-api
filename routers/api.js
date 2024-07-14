@@ -55,16 +55,11 @@ router.get("/posts/:postid/comments", getPostComments);
 // Create new Comment
 router.post(
   "/comments",
-  body("postid")
+  body("originPost")
     .trim()
     .escape()
     .notEmpty()
     .withMessage("Post Id cannot be empty"),
-  body("userid")
-    .trim()
-    .escape()
-    .notEmpty()
-    .withMessage("User Id cannot be empty"),
   body("content")
     .trim()
     .escape()

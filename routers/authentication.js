@@ -9,16 +9,27 @@ const {
 const { checkForErrors } = require("../controllers/validation");
 const { createUser, uploadProfileImage } = require("../controllers/user");
 
+// Login
 router.post(
   "/login",
-  body("username").trim().escape().notEmpty(),
-  body("password").trim().escape().notEmpty(),
+  body("username")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Username cannot be empty"),
+  body("password")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Password cannot be empty"),
   auth,
   createToken
 );
 
+// Log Out
 router.get("/logout", invalidateToken);
 
+// Sign Up
 router.post(
   "/sign-up",
   body("firstname")
@@ -65,6 +76,15 @@ router.post(
   createToken
 );
 
+// Upload Profile Image
 router.post("/upload", verifyToken, uploadProfileImage);
+
+// Check if Logged in
+router.get("/isLoggedIn", verifyToken, (req, res) => {
+  if (req.user) {
+    return res.sendStatus(200);
+  }
+  return res.sendStatus(403);
+});
 
 module.exports = router;

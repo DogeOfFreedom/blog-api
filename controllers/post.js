@@ -15,7 +15,7 @@ const createPost = expressAsyncHandler(async (req, res) => {
 
 const getPostById = expressAsyncHandler(async (req, res) => {
   const { postid } = req.params;
-  const post = await Post.findById(postid);
+  const post = await Post.findById(postid).populate("author", "username");
   res.json(post);
 });
 
@@ -23,9 +23,12 @@ const getAllPosts = expressAsyncHandler(async (req, res) => {
   const { isPublished } = req.query;
   let posts;
   if (isPublished === "true") {
-    posts = await Post.find({ isPublished: true });
+    posts = await Post.find({ isPublished: true }).populate(
+      "author",
+      "username"
+    );
   } else {
-    posts = await Post.find({});
+    posts = await Post.find({}).populate("author", "username");
   }
   res.json(posts);
 });

@@ -39,6 +39,11 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(cookieParser());
 
+if (process.env.ENVIRONMENT === "development") {
+  const development = require("../routers/development");
+  app.use("/dev", development);
+}
+
 const authentication = require("../routers/authentication");
 const cloud = require("../routers/cloudinary");
 const api = require("../routers/api");
