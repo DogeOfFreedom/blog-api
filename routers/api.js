@@ -26,21 +26,18 @@ router.post(
   "/posts",
   body("title")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Title cannot be empty")
     .isLength({ max: 50 })
     .withMessage("Title cannot be logner than 25 characters"),
   body("text")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Text cannot be empty")
     .isLength({ max: 5000 })
     .withMessage("Text cannot be logner than 5000 characters"),
   body("isPublished")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("isPublished cannot be empty"),
   checkForErrors,
@@ -62,14 +59,9 @@ router.get("/posts/:postid/comments", getPostComments);
 // Create new Comment
 router.post(
   "/comments",
-  body("originPost")
-    .trim()
-    .escape()
-    .notEmpty()
-    .withMessage("Post Id cannot be empty"),
+  body("originPost").trim().notEmpty().withMessage("Post Id cannot be empty"),
   body("content")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Content cannot be empty")
     .isLength({ max: 500 })
