@@ -10,7 +10,7 @@ const cors = require("cors");
 // const allowedOrigin = process.env.ORIGIN || "http://127.0.0.1:5173";
 const allowedOrigin = [
   "https://dogeoffreedom-blog-create.netlify.app",
-  "dogeoffreedom-blog-reader.netlify.app",
+  "https://dogeoffreedom-blog-reader.netlify.app",
 ];
 app.use(
   cors({
