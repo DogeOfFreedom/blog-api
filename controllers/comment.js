@@ -22,4 +22,10 @@ const getPostComments = expressAsyncHandler(async (req, res) => {
   res.json(comments);
 });
 
-module.exports = { createComment, getPostComments };
+const deleteComment = expressAsyncHandler(async (req, res) => {
+  const { commentId } = req.params;
+  await Comment.deleteOne({ _id: commentId });
+  res.sendStatus(200);
+});
+
+module.exports = { createComment, getPostComments, deleteComment };

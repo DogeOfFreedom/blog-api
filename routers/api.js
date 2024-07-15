@@ -1,5 +1,9 @@
 const router = require("express").Router();
-const { createComment, getPostComments } = require("../controllers/comment");
+const {
+  createComment,
+  getPostComments,
+  deleteComment,
+} = require("../controllers/comment");
 const { verifyToken } = require("../controllers/jwt");
 const {
   createPost,
@@ -20,11 +24,6 @@ router.get("/", (req, res) => {
 // Create new Post
 router.post(
   "/posts",
-  body("userId")
-    .trim()
-    .escape()
-    .notEmpty()
-    .withMessage("User Id cannot be empty"),
   body("title")
     .trim()
     .escape()
@@ -78,5 +77,8 @@ router.post(
   checkForErrors,
   createComment
 );
+
+// Delete Comment
+router.delete("/comments/:commentId", deleteComment);
 
 module.exports = router;
