@@ -19,6 +19,15 @@ const getPostById = expressAsyncHandler(async (req, res) => {
   res.json(post);
 });
 
+const publishPost = expressAsyncHandler(async (req, res) => {
+  const { postid } = req.params;
+  const { isPublished } = req.body;
+  const post = await Post.findById(postid);
+  post.isPublished = isPublished;
+  await post.save();
+  res.sendStatus(200);
+});
+
 const getAllPosts = expressAsyncHandler(async (req, res) => {
   const { isPublished } = req.query;
   let posts;
@@ -33,4 +42,4 @@ const getAllPosts = expressAsyncHandler(async (req, res) => {
   res.json(posts);
 });
 
-module.exports = { createPost, getPostById, getAllPosts };
+module.exports = { createPost, getPostById, getAllPosts, publishPost };

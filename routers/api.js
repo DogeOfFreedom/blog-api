@@ -1,7 +1,12 @@
 const router = require("express").Router();
 const { createComment, getPostComments } = require("../controllers/comment");
 const { verifyToken } = require("../controllers/jwt");
-const { createPost, getPostById, getAllPosts } = require("../controllers/post");
+const {
+  createPost,
+  getPostById,
+  getAllPosts,
+  publishPost,
+} = require("../controllers/post");
 const { body } = require("express-validator");
 const { checkForErrors } = require("../controllers/validation");
 
@@ -45,6 +50,9 @@ router.post(
 
 // Get specific post
 router.get("/posts/:postid", getPostById);
+
+// Change "isPublished" status of post
+router.post("/posts/:postid", publishPost);
 
 // Get all posts
 router.get("/posts", getAllPosts);
